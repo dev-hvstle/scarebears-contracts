@@ -12,8 +12,8 @@ contract SquareBears is ERC721A, Ownable{
     uint256 public constant MAX_WHITELIST_SUPPLY = 2500;
     uint256 public constant MAX_PUBLIC_MINT = 10;
     uint256 public constant MAX_WHITELIST_MINT = 2;
-    uint256 public constant PUBLIC_SALE_PRICE = .15 ether;
-    uint256 public constant WHITELIST_SALE_PRICE = .069 ether;
+    uint256 public constant PUBLIC_SALE_PRICE = .099 ether;
+    uint256 public constant WHITELIST_SALE_PRICE = .0799 ether;
 
     string private  baseTokenUri;
     string public   placeholderTokenUri;
