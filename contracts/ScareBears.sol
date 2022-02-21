@@ -8,8 +8,8 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 contract SquareBears is ERC721A, Ownable{
     using Strings for uint256;
 
-    uint256 public constant MAX_SUPPLY = 6666;
-    uint256 public constant MAX_WHITELIST_SUPPLY = 4000;
+    uint256 public constant MAX_SUPPLY = 6665;
+    uint256 public constant MAX_WHITELIST_SUPPLY = 3100;
     uint256 public constant MAX_PUBLIC_MINT = 10;
     uint256 public constant MAX_WHITELIST_MINT = 3;
     uint256 public constant PUBLIC_SALE_PRICE = .099 ether;
@@ -66,7 +66,7 @@ contract SquareBears is ERC721A, Ownable{
     function teamMint() external onlyOwner{
         require(!teamMinted, "Square Bears :: Team already minted");
         teamMinted = true;
-        _safeMint(msg.sender, 100);
+        _safeMint(msg.sender, 200);
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
@@ -77,11 +77,13 @@ contract SquareBears is ERC721A, Ownable{
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
+        uint256 trueId = tokenId + 1;
+
         if(!isRevealed){
             return placeholderTokenUri;
         }
         //string memory baseURI = _baseURI();
-        return bytes(baseTokenUri).length > 0 ? string(abi.encodePacked(baseTokenUri, tokenId.toString(), ".json")) : "";
+        return bytes(baseTokenUri).length > 0 ? string(abi.encodePacked(baseTokenUri, trueId.toString(), ".json")) : "";
     }
 
     /// @dev walletOf() function shouldn't be called on-chain due to gas consumption
