@@ -36,35 +36,35 @@ contract SquareBears is ERC721A, Ownable{
     }
 
     modifier callerIsUser() {
-        require(tx.origin == msg.sender, "Scare Bears :: Cannot be called by a contract");
+        require(tx.origin == msg.sender, "Square Bears :: Cannot be called by a contract");
         _;
     }
 
     function mint(uint256 _quantity) external payable callerIsUser{
-        require(publicSale, "Scare Bears :: Not Yet Active.");
-        require((totalSupply() + _quantity) <= MAX_SUPPLY, "Scare Bears :: Beyond Max Supply");
-        require((totalPublicMint[msg.sender] +_quantity) <= MAX_PUBLIC_MINT, "Scare Bears :: Already minted 3 times!");
-        require(msg.value >= (PUBLIC_SALE_PRICE * _quantity), "Scare Bears :: Below ");
+        require(publicSale, "Square Bears :: Not Yet Active.");
+        require((totalSupply() + _quantity) <= MAX_SUPPLY, "Square Bears :: Beyond Max Supply");
+        require((totalPublicMint[msg.sender] +_quantity) <= MAX_PUBLIC_MINT, "Square Bears :: Already minted 3 times!");
+        require(msg.value >= (PUBLIC_SALE_PRICE * _quantity), "Square Bears :: Below ");
 
         totalPublicMint[msg.sender] += _quantity;
         _safeMint(msg.sender, _quantity);
     }
 
     function whitelistMint(bytes32[] memory _merkleProof, uint256 _quantity) external payable callerIsUser{
-        require(whiteListSale, "Scare Bears :: Minting is on Pause");
-        require((totalSupply() + _quantity) <= MAX_SUPPLY, "Scare Bears :: Cannot mint beyond max supply");
-        require((totalWhitelistMint[msg.sender] + _quantity)  <= MAX_WHITELIST_MINT, "Scare Bears :: Cannot mint beyond whitelist max mint!");
-        require(msg.value >= (WHITELIST_SALE_PRICE * _quantity), "Scare Bears :: Payment is below the price");
+        require(whiteListSale, "Square Bears :: Minting is on Pause");
+        require((totalSupply() + _quantity) <= MAX_SUPPLY, "Square Bears :: Cannot mint beyond max supply");
+        require((totalWhitelistMint[msg.sender] + _quantity)  <= MAX_WHITELIST_MINT, "Square Bears :: Cannot mint beyond whitelist max mint!");
+        require(msg.value >= (WHITELIST_SALE_PRICE * _quantity), "Square Bears :: Payment is below the price");
         //create leaf node
         bytes32 sender = keccak256(abi.encodePacked(msg.sender));
-        require(MerkleProof.verify(_merkleProof, merkleRoot, sender), "Scare Bears :: You are not whitelisted");
+        require(MerkleProof.verify(_merkleProof, merkleRoot, sender), "Square Bears :: You are not whitelisted");
 
         totalWhitelistMint[msg.sender] += _quantity;
         _safeMint(msg.sender, _quantity);
     }
 
     function teamMint() external onlyOwner{
-        require(!teamMinted, "Scare Bears :: Team already minted");
+        require(!teamMinted, "Square Bears :: Team already minted");
         teamMinted = true;
         _safeMint(msg.sender, 100);
     }
@@ -81,7 +81,7 @@ contract SquareBears is ERC721A, Ownable{
             return placeholderTokenUri;
         }
         //string memory baseURI = _baseURI();
-        return bytes(baseTokenUri).length > 0 ? string(abi.encodePacked(baseTokenUri, tokenId.toString())) : "";
+        return bytes(baseTokenUri).length > 0 ? string(abi.encodePacked(baseTokenUri, tokenId.toString(), ".json")) : "";
     }
 
     /// @dev walletOf() function shouldn't be called on-chain due to gas consumption
